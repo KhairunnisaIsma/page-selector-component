@@ -12,18 +12,11 @@
   --button-text: #1F2128;
   
   /* --- CHECKBOX COLORS --- */
-  
   --checkbox-border: #BDBDBD; 
-  
   --checkbox-border-hover: #878787;
-  
   --checkbox-checked: #2469F6;
-  
   --checkbox-checked-interaction: #5087F8;
-
   --checkbox-ring: rgba(36, 105, 246, 0.2); 
-  
-  --tick-ghost-color: #E3E3E3; 
   
   --text-color: #1F2128;
 }
@@ -70,6 +63,7 @@ body {
   font-size: 14px;
   color: var(--text-color);
   font-weight: 400;
+  line-height: 1.3; /* Sesuai Figma 130% */
   flex-grow: 1;
 }
 
@@ -82,7 +76,7 @@ body {
   opacity: 0.5;
 }
 
-/* --- CUSTOM CHECKBOX (FINAL PIXEL PERFECT) --- */
+/* --- CUSTOM CHECKBOX (SVG METHOD - PIXEL PERFECT) --- */
 .custom-checkbox {
   position: relative;
   width: 25px; 
@@ -100,6 +94,7 @@ body {
   position: absolute;
 }
 
+/* KOTAK VISUAL */
 .checkmark {
   position: absolute;
   top: 0;
@@ -107,69 +102,82 @@ body {
   height: 25px;
   width: 25px;
   background-color: #FFFFFF;
-  border: 1px solid var(--checkbox-border); 
+  border: 1px solid var(--checkbox-border);
   border-radius: 6px; 
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-sizing: border-box;
 }
 
-/* --- STATES LOGIC --- */
-/* HOVER (Unchecked) */
+/* --- STATES --- */
+
+/* Hover (Unchecked) */
 .list-item:hover .checkmark {
   border-color: var(--checkbox-border-hover);
 }
 
-/* ACTIVE (Unchecked) - Ring Effect */
+/* Active (Unchecked) */
 .list-item:active .checkmark {
   border-color: var(--checkbox-border-hover);
   box-shadow: 0px 0px 0px 4px var(--checkbox-ring); 
 }
 
-/* CHECKED (Normal) */
+/* Checked (Normal) */
 .custom-checkbox input:checked ~ .checkmark {
-  background-color: var(--checkbox-checked); 
+  background-color: var(--checkbox-checked);
   border-color: var(--checkbox-checked);
   box-shadow: none;
 }
 
-/* CHECKED + ACTIVE (Ring Effect) */
+/* Checked + Hover */
+.list-item:hover input:checked ~ .checkmark {
+  background-color: var(--checkbox-checked-interaction); 
+  border-color: var(--checkbox-checked-interaction);
+}
+
+/* Checked + Active */
 .list-item:active input:checked ~ .checkmark {
   box-shadow: 0px 0px 0px 4px var(--checkbox-ring); 
 }
 
-/* --- TICK ICON (SIZE UPDATED) --- */
-/* Vector size target: 17px wide x 12px tall */
+/* --- TICK ICON (SVG REPLACEMENT) --- */
 .checkmark::after {
   content: "";
   position: absolute;
-  left: 9px; 
-  top: 5px;
   width: 6px;  
   height: 12px; 
-  
-  border: solid transparent;
-  border-width: 0 2px 2px 0;
+  /* BORDER HACK */
+  border: solid transparent; 
+  border-width: 0 2px 2px 0; 
   transform: rotate(45deg);
+  top: 4px; 
+  left: 9px; 
   opacity: 0;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* GHOST TICK (Hover Unchecked) */
+/* GHOST TICK */
 .list-item:hover input:not(:checked) ~ .checkmark::after {
   opacity: 1;
-  border-color: var(--tick-ghost-color); 
+  border-color: var(--tick-ghost-color); /* #E3E3E3 */
 }
 
-/* REAL TICK (Checked) */
+/* REAL TICK */
 .custom-checkbox input:checked ~ .checkmark::after {
   opacity: 1;
   border-color: #FFFFFF;
   animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
+/* ANIMASI POP-IN */
 @keyframes popIn {
-  0% { transform: scale(0) rotate(45deg); opacity: 0; }
-  100% { transform: scale(1) rotate(45deg); opacity: 1; }
+  0% { 
+    transform: scale(0) rotate(45deg); 
+    opacity: 0; 
+  }
+  100% { 
+    transform: scale(1) rotate(45deg); 
+    opacity: 1; 
+  }
 }
 
 /* --- BUTTON DONE --- */
@@ -183,7 +191,7 @@ body {
   cursor: pointer;
   font-family: var(--font-family);
   font-size: 14px;
-  font-weight: 400; /* Regular */
+  font-weight: 400;
   color: var(--button-text);
   transition: background-color 0.2s ease;
 }
